@@ -3,16 +3,23 @@ const { Model } = Sql;
 const sequelize = require('../configs/sequelize');
 const User = require('./User');
 
-// Create Reminder model class
+/**
+ * Reminder model.
+ * @var class
+ */
 class Reminder extends Model {}
 
-// Initialize Reminder model
+/**
+ * Initialize Reminder model
+ * @var object
+ */
 Reminder.init({
   user_id: { 
     type: Sql.INTEGER,
+    allowNull: false,
     references: { 
-      model: User, key: 'id',
-      allowNull: false
+      model: User, 
+      key: 'id',
     },
   },
   code: { 
@@ -23,23 +30,17 @@ Reminder.init({
     type: Sql.DATE,
     allowNull: true
   },
-  activated_at: { 
-    type: Sql.DATE,
-    allowNull: true,
-    defaultValue: null
-  },
 }, {
   underscored: true,
-  tableName: 'activations',
-  modelName: 'activation',
+  tableName: 'reminders',
   sequelize
 });
 
-// Set relationships
+// User association
 Reminder.belongsTo(User, {
   foreignKey: 'user_id',
   targetKey: 'id',
-  onDelete: 'CASCADE'
+  as: 'user'
 });
 
 // Export Reminder model

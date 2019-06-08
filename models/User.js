@@ -1,17 +1,25 @@
 const Sql = require('sequelize');
 const { Model } = Sql;
 const sequelize = require('../configs/sequelize');
+const Role = require('./Role');
 const Activation = require('./Activation');
-const Vote = require('./Vote');
-const Activation = require('./Activation');
+const Reminder = require('./Reminder');
+const Reaction = require('./Reaction');
 const Definition = require('./Definition');
 const Term = require('./Term');
 const Point = require('./Point');
+const Context = require('./Context');
 
-// Create User model class
+/**
+ * User model.
+ * @var class
+ */
 class User extends Model {}
 
-// Initialize User model
+/**
+ * Initialise User model.
+ * @var object
+ */
 User.init({
   avatar: { 
     type: Sql.TEXT, 
@@ -35,33 +43,77 @@ User.init({
 }, {
   underscored: true,
   tableName: 'users',
-  modelName: 'user',
   sequelize
 });
 
-// Set user relationship with votes
-User.hasMany(Vote, { 
-  foreignKey: 'voter_id'
+// Roles association
+User.belongsToMany(Role, {
+  as: 'roles',
+  through: 'RoleUser',
+  foreignKey: 'user_id',
+  otherKey: 'role_id'
 });
 
-// Set user relationship with votes
-User.hasOne(Activation, { 
-  foreignKey: 'user_id'
+// Contexts association
+User.hasMany(Context, {
+  as: 'contexts',
+  foreignKey: 'creator_id',
 });
 
-// Set definition relationships
-User.hasMany(Definition, { 
-  foreignKey: 'user_id'
-});
-    
-// Set terms relationships
-User.hasMany(Term, { 
-  foreignKey: 'user_id'
+// Contributions association
+User.belongsToMany(Term, {
+  as: 'contributions',
+  through: 'Contributor',
+  foreignKey: 'contributor_id',
+  otherKey: 'term_id',
 });
 
-// Set points relationships
-User.hasMany(Point, { 
-  foreignKey: 'user_id'
+// Created Definitions association
+User.hasMany(Definition, {
+  as: 'createdDefinitions',
+  foreignKey: 'creator_id',
+});
+
+// Edited Definitions association
+User.hasMany(Definition, {
+  as: 'editedDefinitions',
+  foreignKey: 'editor_id',
+});
+
+// Created Terms association
+User.hasMany(Term, {
+  as: 'createdTerms',
+  foreignKey: 'creator_id',
+});
+
+// Edited Terms association
+User.hasMany(Term, {
+  as: 'editedTerms',
+  foreignKey: 'editor_id',
+});
+
+// Point association
+User.hasMany(Point, {
+  as: 'points',
+  foreignKey: 'user_id',
+});
+
+// Reaction association
+User.hasMany(Reaction, {
+  as: 'reactions',
+  foreignKey: 'reactor_id',
+});
+
+// Reminder association
+User.hasOne(Reminder, {
+  as: 'reminders',
+  foreignKey: 'user_id',
+});
+
+// Activation association
+User.hasOne(Activation, {
+  as: 'activations',
+  foreignKey: 'user_id',
 });
       
 // Export User model

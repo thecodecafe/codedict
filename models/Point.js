@@ -2,6 +2,8 @@ const Sql = require('sequelize');
 const { Model } = Sql;
 const sequelize = require('../configs/sequelize');
 const User = require('./User');
+const Term = require('./Term');
+const Definition = require('./Definition');
 
 // Create Point model class
 class Point extends Model {}
@@ -10,13 +12,17 @@ class Point extends Model {}
 Point.init({
   user_id: { 
     type: Sql.INTEGER,
-    references: { model: User, key: 'id', },
+    allowNull: false,
+    references: { 
+      model: User, 
+      key: 'id'
+    },
   },
   amount: { 
     type: Sql.INTEGER, 
     allowNull: false
   },
-  reason: { 
+  type: { 
     type: Sql.STRING,
     allowNull: false
   },
@@ -24,23 +30,39 @@ Point.init({
     type: Sql.STRING,
     allowNull: true
   },
-  pointable_id: { 
+  pointable_id: {
     type: Sql.INTEGER,
     allowNull: true
   },
 }, {
   underscored: true,
   tableName: 'points',
-  modelName: 'point',
   sequelize
 });
 
-// Set relationships
+// User association
 Point.belongsTo(User, {
   foreignKey: 'user_id',
-  targetKey: 'id',
-  onDelete: 'CASCADE'
+  as: 'user'
 });
 
-// Export Point model
+// Term association
+Point.belongsTo(Term, {
+  foreignKey: 'pointable_id',
+  scope:{
+    pointable_type: 'term'
+  },
+  as: 'terms'
+});
+
+// Definition association
+Point.belongsTo(Definition, {
+  foreignKey: 'pointable_id',
+  scope:{
+    pointable_type: 'definition'
+  },
+  as: 'definition'
+});
+
+// Export model.
 module.exports = Point;

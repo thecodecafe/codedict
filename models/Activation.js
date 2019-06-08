@@ -1,3 +1,4 @@
+'use strict';
 const Sql = require('sequelize');
 const { Model } = Sql;
 const sequelize = require('../configs/sequelize');
@@ -10,18 +11,15 @@ class Activation extends Model {}
 Activation.init({
   user_id: { 
     type: Sql.INTEGER,
+    allowNull: false,
     references: { 
-      model: User, key: 'id',
-      allowNull: false
+      model: User,
+      key: 'id',
     },
   },
   code: { 
     type: Sql.TEXT, 
     allowNull: true,
-  },
-  expires_at: { 
-    type: Sql.DATE,
-    allowNull: true
   },
   activated_at: { 
     type: Sql.DATE,
@@ -31,15 +29,14 @@ Activation.init({
 }, {
   underscored: true,
   tableName: 'activations',
-  modelName: 'activation',
   sequelize
 });
 
-// Set relationships
+// User Association
 Activation.belongsTo(User, {
   foreignKey: 'user_id',
   targetKey: 'id',
-  onDelete: 'CASCADE'
+  as: 'user'
 });
 
 // Export Activation model
