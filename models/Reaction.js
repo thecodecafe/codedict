@@ -5,6 +5,7 @@ const User = require('./User');
 const Term = require('./Term');
 const Definition = require('./Definition');
 const sequelize = require('../configs/sequelize');
+const { REACTION_TYPES } = require('../configs/const');
 
 /**
  * Reaction model.
@@ -20,7 +21,10 @@ Reaction.init({
   type: {
     type: Sequelize.STRING,
     allowNull: false,
-    defaultValue: 'heart',
+    defaultValue: 'unknown',
+    validate: {
+      isIn: REACTION_TYPES
+    },
   },
   reactable_type: {
     type: Sequelize.STRING,
@@ -36,7 +40,7 @@ Reaction.init({
     references: {
       model: User,
       key: 'id'
-    }
+    },
   },
 }, {
   underscored: true,

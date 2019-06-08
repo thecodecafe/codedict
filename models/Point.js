@@ -4,6 +4,7 @@ const sequelize = require('../configs/sequelize');
 const User = require('./User');
 const Term = require('./Term');
 const Definition = require('./Definition');
+const { POINT_TYPES } = require('../configs/const');
 
 // Create Point model class
 class Point extends Model {}
@@ -26,15 +27,18 @@ Point.init({
   },
   type: {
     type: Sql.STRING,
-    allowNull: false
+    allowNull: false,
+    validate: {
+      isIn: POINT_TYPES
+    },
   },
   pointable: { 
     type: Sql.STRING,
-    allowNull: true
+    allowNull: true,
   },
   pointable_id: {
     type: Sql.INTEGER,
-    allowNull: true
+    allowNull: true,
   },
 }, {
   underscored: true,
