@@ -11,18 +11,20 @@ class Point extends Model {}
 // Initialize Point model
 Point.init({
   user_id: { 
-    type: Sql.INTEGER,
+    type: Sql.STRING,
     allowNull: false,
-    references: { 
+    defaultValue: 'general',
+    references: {
       model: User, 
       key: 'id'
     },
   },
-  amount: { 
+  amount: {
     type: Sql.INTEGER, 
-    allowNull: false
+    allowNull: false,
+    defaultValue: 0,
   },
-  type: { 
+  type: {
     type: Sql.STRING,
     allowNull: false
   },
