@@ -25,6 +25,11 @@ module.exports = {
       type: Sequelize.INTEGER,
       allowNull: false,
     },
+    subscribed: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      defaultValue: 0
+    },
     created_at: {
       type: Sequelize.DATE,
       allowNull: false,
