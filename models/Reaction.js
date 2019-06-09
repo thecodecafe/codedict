@@ -1,76 +1,71 @@
 'use strict';
-const Sql = require('sequelize');
-const { Model } = Sql;
-const User = require('./User');
-const Term = require('./Term');
-const Definition = require('./Definition');
-const sequelize = require('../configs/sequelize');
+// get dependencies
 const { REACTION_TYPES } = require('../configs/const');
 
 /**
- * Reaction model.
- * @var class
+ * Reaction Model.
+ * @param {Object} Sequelize
+ * @param {Object} DataTypes
+ * @returns Object
  */
-class Reaction extends Model {}
-
-/**
- * Initialise reaction model.
- * @var object
- */
-Reaction.init({
-  type: {
-    type: Sequelize.STRING,
-    allowNull: false,
-    defaultValue: 'unknown',
-    validate: {
-      isIn: REACTION_TYPES
+module.exports = (Sequelize, DataTypes) => {
+  // Define model
+  const Reaction = Sequelize.define('Reaction',
+    {
+      type: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: 'unknown',
+        validate: {
+          isIn: REACTION_TYPES
+        },
+      },
+      reactable_type: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      reactable_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      reactor_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+      },
     },
-  },
-  reactable_type: {
-    type: Sequelize.STRING,
-    allowNull: false,
-  },
-  reactable_id: {
-    type: Sequelize.INTEGER,
-    allowNull: false,
-  },
-  reactor_id: {
-    type: Sequelize.INTEGER,
-    allowNull: true,
-    references: {
-      model: User,
-      key: 'id'
-    },
-  },
-}, {
-  underscored: true,
-  tableName: 'reactions',
-  sequelize,
-});
+    {
+      underscored: true,
+      tableName: 'reactions',
+    }
+  );
 
-// Reactor association
-Reaction.belongsTo(User, {
-  foreignKey: 'reactor_id',
-  as: 'reactor'
-});
+  // Define associations
+  Reaction.associate = ({ User, Term, Definition }) => {
+    // Reactor association
+    Reaction.belongsTo(User, {
+      foreignKey: 'reactor_id',
+      as: 'reactor'
+    });
 
-// Term association
-Reaction.belongsTo(Term, {
-  foreignKey: 'reactable_id',
-  as: 'term',
-  scope: {
-    reactable_type: 'term'
+    // Term association
+    Reaction.belongsTo(Term, {
+      foreignKey: 'reactable_id',
+      as: 'term',
+      scope: {
+        reactable_type: 'term'
+      }
+    });
+
+    // Definition association
+    Reaction.belongsTo(Definition, {
+      foreignKey: 'reactable_id',
+      as: 'definition',
+      scope: {
+        reactable_type: 'definition'
+      }
+    });
   }
-});
 
-// Definition association
-Reaction.belongsTo(Definition, {
-  foreignKey: 'reactable_id',
-  as: 'definition',
-  scope: {
-    reactable_type: 'definition'
-  }
-});
-
-// Export model.
-module.exports = Reaction;
+  // Return model
+  return Reaction;
+};

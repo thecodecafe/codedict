@@ -1,46 +1,38 @@
 'use strict';
-const Sql = require('sequelize');
-const { Model } = Sql;
-const sequelize = require('../configs/sequelize');
-const User = require('./User');
-
 /**
- * Context model.
- * @var class
+ * Context Model
+ * @param {Object} Sequelize
+ * @param {Object} DataTypes
+ * @returns Object
  */
-class Context extends Model {};
-
-/**
- * Initialise Context Model.
- * @var object
- */
-Context.init({
-  name: {
-    type: Sql.STRING,
-    allowNull: false,
-    unique: true,
-  },
-  creator_id: {
-    type: Sql.INTEGER,
-    allowNull: true,
-    defaultValue: null,
-    references: {
-      model: User,
-      key: 'id'
+module.exports = (Sequelize, DataTypes) => {
+  // Define model
+  const Context = Sequelize.define('Context', {
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+    },
+    creator_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      defaultValue: null,
     }
-  }
-}, {
-  underscored: true,
-  tableName: 'contexts',
-  sequelize
-});
+  }, {
+      underscored: true,
+      tableName: 'contexts',
+    })
 
-// User association
-Context.belongsTo(User, {
-  foreignKey: 'creator_id',
-  as: 'creator',
-  targetKey: 'id'
-});
+  // Define associations
+  Context.associate = ({ User }) => {
+    // User association
+    Context.belongsTo(User, {
+      foreignKey: 'creator_id',
+      as: 'creator',
+      targetKey: 'id'
+    });
+  };
 
-// export model
-module.exports = Context;
+  // Return model
+  return Context;
+};

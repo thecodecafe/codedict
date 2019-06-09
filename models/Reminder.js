@@ -1,47 +1,42 @@
-const Sql = require('sequelize');
-const { Model } = Sql;
-const sequelize = require('../configs/sequelize');
-const User = require('./User');
-
+'use strict';
 /**
- * Reminder model.
- * @var class
+ * Reminder Model.
+ * @param {Object} Sequelize
+ * @param {Object} DataTypes
+ * @returns Object
  */
-class Reminder extends Model {}
-
-/**
- * Initialize Reminder model
- * @var object
- */
-Reminder.init({
-  user_id: { 
-    type: Sql.INTEGER,
-    allowNull: false,
-    references: { 
-      model: User, 
-      key: 'id',
+module.exports = (Sequelize, DataTypes) => {
+  const Reminder = Sequelize.define('Reminder',
+    {
+      user_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      code: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+      },
+      expires_at: {
+        type: DataTypes.DATE,
+        allowNull: true
+      },
     },
-  },
-  code: { 
-    type: Sql.TEXT, 
-    allowNull: true,
-  },
-  expires_at: { 
-    type: Sql.DATE,
-    allowNull: true
-  },
-}, {
-  underscored: true,
-  tableName: 'reminders',
-  sequelize
-});
+    {
+      underscored: true,
+      tableName: 'reminders',
+    }
+  );
 
-// User association
-Reminder.belongsTo(User, {
-  foreignKey: 'user_id',
-  targetKey: 'id',
-  as: 'user'
-});
+  // Define associations
+  Reminder.associate = ({ User }) => {
+    // User association
+    Reminder.belongsTo(User, {
+      foreignKey: 'user_id',
+      targetKey: 'id',
+      as: 'user'
+    });
+  }
 
-// Export Reminder model
-module.exports = Reminder;
+  // return model
+  return Reminder;
+};

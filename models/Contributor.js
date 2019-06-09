@@ -1,54 +1,46 @@
 'use strict';
-const Sql = require('sequelize');
-const { Model } = Sql;
-const User = require('./User');
-const Term = require('./Term');
-
 /**
- * Contributor model.
- * @var class
+ * Contributor Model
+ * @param {Object} Sequelize
+ * @param {Object} DataTypes
+ * @returns Object
  */
-class Contributor extends Model {}
+module.exports = (Sequelize, DataTypes) => {
+  // Define model
+  const Contributor = Sequelize.define('Contributor', {
+    term_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    contributor_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    subscribed: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0
+    }
+  }, {
+    underscored: true,
+    tableName: 'contributors'
+  });
 
-/**
- * Initialise Contributor model.
- * @var  object
- */
-Contributor.init({
-  term_id: {
-    type: Sequelize.INTEGER,
-    allowNull: false,
-    references: {
-      model: Term,
-      key: 'id'
-    }
-  },
-  contributor_id: {
-    type: Sequelize.INTEGER,
-    allowNull: false,
-    references: {
-      model: User,
-      key: 'id'
-    }
-  },
-  subscribed: {
-    type: Sequelize.INTEGER,
-    allowNull: false,
-    defaultValue: 0
+  // Define associations
+  Contributor.associate = ({ User, Term }) => {
+    // Term association
+    Contributor.belongsTo(Term, {
+      foreignKey: 'term_id',
+      as: 'term'
+    });
+
+    // Contributor association
+    Contributor.belongsTo(User, {
+      foreignKey: 'contributor_id',
+      as: 'contributor'
+    });
   }
-});
 
-// Term association
-Contributor.belongsTo(Term, {
-  foreignKey: 'term_id',
-  as: 'term'
-});
-
-// Contributor association
-Contributor.belongsTo(User, {
-  foreignKey: 'contributor_id',
-  as: 'contributor'
-});
-
-// Export model
-module.exports = Contributor;
+  // Return model
+  return Contributor;
+};

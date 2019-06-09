@@ -1,39 +1,37 @@
 'use strict';
-const Sql = require('sequelize'); 
-const {Model} = Sql;
-const User = require('./User');
-const sequelize = require('../configs/sequelize');
-
 /**
- * Roles model.
- * @var class
+ * Role Model.
+ * @param {Object} Sequelize
+ * @param {Object} DataTypes
+ * @returns Object
  */
-class Role extends Model {};
+module.exports = (Sequelize, DataTypes) => {
+  const Role = Sequelize.define('Role',
+    {
+      name: {
+        type: DataTypes.STRING
+      },
+      display_name: {
+        type: DataTypes.STRING
+      }
+    },
+    {
+      underscored: true,
+      tableName: 'roles',
+    }
+  );
 
-/**
- * Initialize model.
- * @var object
- */
-Role.init({
-  name: {
-    type: Sql.STRING
-  },
-  display_name: {
-    type: Sql.STRING
-  }
-}, {
-  underscored: true,
-  tableName: 'roles',
-  sequelize
-});
+  // Define associations
+  Role.associate = ({User}) => {
+    // User association.
+    Role.belongsToMany(User, {
+      through: 'RoleUser',
+      as: 'users',
+      foreignKey: 'role_id',
+      otherKey: 'user_id'
+    });
+  };
 
-// User association.
-Role.belongsToMany(User, { 
-  through: 'RoleUser',
-  as: 'users',
-  foreignKey: 'role_id',
-  otherKey: 'user_id'
-});
-
-// export model as module.
-module.exports = Role;
+  // return model
+  return Role;
+};
