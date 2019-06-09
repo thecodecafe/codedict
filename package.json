@@ -4,7 +4,7 @@
   "description": "Dictionary for coders from all works of language.",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "cross-env NODE_ENV=test nyc mocha --exit --require @babel/register --timeout 600000 ./test/**/*.spec.js"
   },
   "keywords": [
     "dictionary",
@@ -32,5 +32,14 @@
     "pg-hstore": "^2.3.2",
     "sequelize": "^5.2.6",
     "sequelize-cli": "^5.4.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.4.5",
+    "@babel/register": "^7.4.4",
+    "chai": "^4.2.0",
+    "cross-env": "^5.2.0",
+    "mocha": "^6.1.4",
+    "nyc": "^14.1.1",
+    "sequelize-test-helpers": "^1.1.2"
   }
 }
