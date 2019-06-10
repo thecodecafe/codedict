@@ -7,39 +7,39 @@ const {
 } = require('sequelize-test-helpers');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
-const RoleModel = require('../../models/Role');
+const ReminderModel = require('../../models/Reminder');
 const UserModel = require('../../models/User');
 chai.use(sinonChai);
 const expect = chai.expect;
 
 // Describe file test
-describe('<Role Model>', () => {
+describe('<Reminder Model>', () => {
     // Initialize model
-    const Role = RoleModel(sequelize, dataTypes);
+    const Reminder = ReminderModel(sequelize, dataTypes);
 
     // Create an instance of model
-    const RoleInstance = new Role();
+    const ReminderInstance = new Reminder();
 
     // Test model name
-    describe('Name', () => checkModelName(Role)('Role'));
+    describe('Name', () => checkModelName(Reminder)('Reminder'));
 
     // Test model properties
     describe('Properties', () => {
-        ['name', 'display_name'].forEach(
-            checkPropertyExists(RoleInstance)
+        ['code', 'expires_at', 'user_id'].forEach(
+            checkPropertyExists(ReminderInstance)
         );
     });
 
     // Test associations
     describe('Associations', () => {
-        // Initialize models
+        // Initialize model
         const User = UserModel(sequelize, dataTypes);
 
         // Associate models before running test
-        before(() => Role.associate({ User }));
+        before(() => Reminder.associate({ User }));
 
-        // belongs to many User
-        it( 'belongs to many User', 
-            () => expect(Role.belongsToMany).to.have.been.calledWith(User) );
+        // Belongs to one User
+        it( 'belongs to one user', 
+            () => expect(Reminder.belongsTo).to.have.been.calledWith(User) );
     });
 });

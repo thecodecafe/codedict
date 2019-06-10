@@ -47,7 +47,7 @@ module.exports = (Sequelize, DataTypes) => {
     Reaction
   }) => {
     // Technical definition association
-    Definition.hasOne(Definition, {
+    Term.hasOne(Definition, {
       foreignKey: 'term_id',
       scope: {
         type: TECHNICAL_DEFINITION
@@ -56,7 +56,7 @@ module.exports = (Sequelize, DataTypes) => {
     });
 
     // Technical definition association
-    Definition.hasOne(Definition, {
+    Term.hasOne(Definition, {
       foreignKey: 'term_id',
       scope: {
         type: SIMPLE_DEFINITION
@@ -65,7 +65,7 @@ module.exports = (Sequelize, DataTypes) => {
     });
 
     // Reactions association.
-    Definition.hasMany(Reaction, {
+    Term.hasMany(Reaction, {
       foreignKey: 'reactable_id',
       scope: { reactable_type: 'term' },
       as: 'reactions'

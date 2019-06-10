@@ -37,4 +37,5 @@ module.exports = (Sequelize, DataTypes) => {
   }
 
   // Return model
+  return Activation;
 };

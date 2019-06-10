@@ -7,26 +7,26 @@ const {
 } = require('sequelize-test-helpers');
 const chai = require('chai');
 const sinonChai = require('sinon-chai');
-const RoleModel = require('../../models/Role');
+const ActivationModel = require('../../models/Activation');
 const UserModel = require('../../models/User');
 chai.use(sinonChai);
 const expect = chai.expect;
 
 // Describe file test
-describe('<Role Model>', () => {
+describe('<Activation Model>', () => {
     // Initialize model
-    const Role = RoleModel(sequelize, dataTypes);
+    const Activation = ActivationModel(sequelize, dataTypes);
 
     // Create an instance of model
-    const RoleInstance = new Role();
+    const ActivationInstance = new Activation();
 
     // Test model name
-    describe('Name', () => checkModelName(Role)('Role'));
+    describe('Name', () => checkModelName(Activation)('Activation'));
 
     // Test model properties
     describe('Properties', () => {
-        ['name', 'display_name'].forEach(
-            checkPropertyExists(RoleInstance)
+        ['code', 'activated_at', 'user_id'].forEach(
+            checkPropertyExists(ActivationInstance)
         );
     });
 
@@ -36,10 +36,10 @@ describe('<Role Model>', () => {
         const User = UserModel(sequelize, dataTypes);
 
         // Associate models before running test
-        before(() => Role.associate({ User }));
+        before(() => Activation.associate({ User }));
 
-        // belongs to many User
-        it( 'belongs to many User', 
-            () => expect(Role.belongsToMany).to.have.been.calledWith(User) );
+        // belongs to one User
+        it( 'belongs to one user', 
+            () => expect(Activation.belongsTo).to.have.been.calledWith(User) );
     });
 });

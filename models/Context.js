@@ -31,6 +31,13 @@ module.exports = (Sequelize, DataTypes) => {
       as: 'creator',
       targetKey: 'id'
     });
+
+    // Term association
+    Context.hasMany(Term, {
+      foreignKey: 'context_id',
+      as: 'terms',
+      targetKey: 'id'
+    });
   };
 
   // Return model

@@ -37,7 +37,7 @@ module.exports = (Sequelize, DataTypes) => {
       type: DataTypes.TEXT,
       allowNull: false
     },
-    edit_commment: {
+    edit_comment: {
       type: DataTypes.STRING,
       allowNull: true,
       defaultValue: null,

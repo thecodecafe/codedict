@@ -28,7 +28,7 @@ module.exports = (Sequelize, DataTypes) => {
         isIn: POINT_TYPES
       },
     },
-    pointable: {
+    pointable_type: {
       type: DataTypes.STRING,
       allowNull: true,
     },
