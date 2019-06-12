@@ -24,7 +24,7 @@ module.exports = (Sequelize, DataTypes) => {
     })
 
   // Define associations
-  Context.associate = ({ User }) => {
+  Context.associate = ({ User, Term }) => {
     // User association
     Context.belongsTo(User, {
       foreignKey: 'creator_id',
