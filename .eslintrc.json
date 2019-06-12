@@ -20,7 +20,7 @@
         "no-const-assign": "off",
         "no-console": "off",
         "camelcase": ["error", {"properties": "never"}],
-        "new-cap": "error",
+        "new-cap": ["error", {"capIsNew": false}],
         "no-underscore-dangle": "error",
         "no-this-before-super": "error",
         "prefer-arrow-callback": "error",
