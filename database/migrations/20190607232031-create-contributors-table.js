@@ -8,18 +8,9 @@ module.exports = {
       autoIncrement: true,
       allowNull: false,
     },
-    type: {
-      type: Sequelize.STRING,
-      allowNull: false,
-      defaultValue: 'like',
-    },
-    contributable_type: {
-      type: Sequelize.STRING,
-      allowNull: false,
-    },
-    contributable_id: {
+    term_id: {
       type: Sequelize.INTEGER,
-      allowNull: false,
+      allowNull: true,
     },
     contributor_id: {
       type: Sequelize.INTEGER,
@@ -47,6 +38,15 @@ module.exports = {
         field: 'id',
       },
       onDelete: 'CASCADE',
+    }))
+    .then(() => queryInterface.addConstraint('contributors', ['term_id'], {
+      type: 'foreign key',
+      name: 'contributors_term_id_fkey',
+      references: {
+        table: 'terms',
+        field: 'id',
+      },
+      onDelete: 'SET NULL',
     })),
 
   down: (queryInterface) => queryInterface.dropTable('contributors'),

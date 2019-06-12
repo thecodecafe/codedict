@@ -25,7 +25,7 @@ app.use('/terms', require('./routes/terms')(passport));
 sequelize.authenticate().then(() => {
     console.log('Successfully connected to database.');
 }).catch(e => {
-    throw new Error('Failed to connect to database.');
+    throw new Error('Failed to connect to database: '+e.message);
 });
 
 // start app

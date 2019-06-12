@@ -1,95 +1,103 @@
-const Sql = require('sequelize');
-const { Model } = Sql;
-const sequelize = require('../configs/sequelize');
-const { 
-  SIMPLE_DEFINITION, 
-  TECHNICAL_DEFINITION
-} = require('../configs/const');
-const User = require('./User');
-const Revision = require('./Revision');
-const Definition = require('./Definition');
+'use strict';
+// get dependencies
+const { SIMPLE_DEFINITION, TECHNICAL_DEFINITION } = require('../configs/const');
 
-// Create Term model class
-class Term extends Model {}
+/**
+ * Term Model.
+ * @param {Object} Sequelize
+ * @param {Object} DataTypes
+ * @returns Object
+ */
+module.exports = (Sequelize, DataTypes) => {
+  // Define model
+  const Term = Sequelize.define('Term',
+    {
+      body: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      context_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true
+      },
+      creator_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+      },
+      edit_comment: {
+        type: DataTypes.STRING,
+        allowNull: true
+      },
+      editor_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true
+      }
+    },
+    {
+      underscored: true,
+      tableName: 'terms'
+    }
+  );
 
-// Initialize Term model
-Term.init({
-  title: { 
-    type: Sql.STRING
-  },
-  context: { 
-    type: Sql.STRING
-  },
-  creator_id: { 
-    type: Sql.INTEGER,
-    allowNull: null
-  }
-}, {
-  underscored: true,
-  tableName: 'terms',
-  modelName: 'term',
-  sequelize
-});
+  // Define associations
+  Term.associate = ({
+    User,
+    Context,
+    Definition,
+    Reaction
+  }) => {
+    // Technical definition association
+    Term.hasOne(Definition, {
+      foreignKey: 'term_id',
+      scope: {
+        type: TECHNICAL_DEFINITION
+      },
+      as: 'technical'
+    });
 
-// technical definition relationship
-Definition.hasOne(Definition, {
-  foreignKey: 'term_id',
-  scope: {
-    kind: TECHNICAL_DEFINITION
-  },
-  as: 'technicalDefinition'
-});
+    // Technical definition association
+    Term.hasOne(Definition, {
+      foreignKey: 'term_id',
+      scope: {
+        type: SIMPLE_DEFINITION
+      },
+      as: 'simple'
+    });
 
-// simple definition relationship
-Definition.hasOne(Definition, {
-  foreignKey: 'term_id',
-  scope: {
-    kind: SIMPLE_DEFINITION
-  },
-  as: 'simpleDefinition'
-});
+    // Reactions association.
+    Term.hasMany(Reaction, {
+      foreignKey: 'reactable_id',
+      scope: { reactable_type: 'term' },
+      as: 'reactions'
+    });
 
-// set vote relationship
-Definition.hasMany(Revision, {
-  foreignKey: 'revisable_id',
-  scope: {
-    revisible: 'definition'
-  },
-});
+    // Creator association.
+    Term.belongsTo(User, {
+      foreignKey: 'creator_id',
+      as: 'creator'
+    });
 
-// set vote relationship
-Definition.hasMany(Vote, {
-  foreignKey: 'voted_id',
-  scope: {
-    votable: 'definition',
-    kind: 0
-  },
-  as: 'downVotes'
-});
+    // Editor association.
+    Term.belongsTo(User, {
+      foreignKey: 'editor_id',
+      as: 'editor'
+    });
 
-// set vote relationship
-Definition.hasMany(Vote, {
-  foreignKey: 'voted_id',
-  scope: {
-    votable: 'definition',
-    kind: 1
-  },
-  as: 'upVotes'
-});
+    // Context association.
+    Term.belongsTo(Context, {
+      foreignKey: 'context_id',
+      as: 'context'
+    });
 
-// set vote relationship
-Definition.hasMany(Vote, {
-  foreignKey: 'voted_id',
-  scope: { votable: 'definition' },
-  as: 'votes'
-});
+    // Contributors association.
+    Term.belongsToMany(User, {
+      as: 'contributors',
+      foreignKey: 'term_id',
+      otherKey: 'contributor_id',
+      through: 'Contributor'
+    });
+  };
 
-// set term relationship
-Term.belongsTo(User, {
-    foreignKey: 'user_id',
-    onDelete: 'SET NULL',
-    as: 'author'
-})
-
-// Export Term model
-module.exports = Term;
+  // return model
+  return Term;
+};

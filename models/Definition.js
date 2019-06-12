@@ -1,87 +1,82 @@
-const Sql = require('sequelize');
-const { Model } = Sql;
-const sequelize = require('../configs/sequelize');
-const User = require('./User');
-const Vote = require('./Vote');
-const Revision = require('./Revision');
-const Term = require('./Term');
-const { 
-  SIMPLE_DEFINITION, 
-  TECHNICAL_DEFINITION
-} = require('../configs/const');
+'use strict';
+// get dependencies
+const { SIMPLE_DEFINITION, TECHNICAL_DEFINITION } = require('../configs/const');
 
-// Create Definition model class
-class Definition extends Model { }
-
-// Initialize Definition model
-Definition.init({
-  body: {
-    type: Sql.TEXT
-  },
-  kind: {
-    type: Sql.INTEGER,
-    validate: { isIn: [
-      SIMPLE_DEFINITION, 
-      TECHNICAL_DEFINITION
-    ] }
-  },
-  user_id: {
-    type: Sql.INTEGER,
-    allowNull: true
-  }
-}, {
+/**
+ * Definition Model
+ * @param {Object} Sequelize
+ * @param {Object} DataTypes
+ * @returns Object
+ */
+module.exports = (Sequelize, DataTypes) => {
+  // Defone model
+  const Definition = Sequelize.define('Definition', {
+    term_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    creator_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      defaultValue: null
+    },
+    editor_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      defaultValue: null
+    },
+    type: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: SIMPLE_DEFINITION,
+      validate: {
+        isIn: [SIMPLE_DEFINITION, TECHNICAL_DEFINITION]
+      }
+    },
+    body: {
+      type: DataTypes.TEXT,
+      allowNull: false
+    },
+    edit_comment: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      defaultValue: null
+    }
+  }, {
     underscored: true,
-    tableName: 'definitions',
-    modelName: 'definition',
-    sequelize
+    tableName: 'definitions'
   });
 
-// Set vote relationship
-Definition.belongsTo(Term, {
-  foreignKey: 'term_id',
-});
+  // Define associations
+  Definition.associate = ({ User, Reaction, Term }) => {
+    // Term association.
+    Definition.belongsTo(Term, {
+      foreignKey: 'term_id',
+      as: 'term'
+    });
 
-// Set vote relationship
-Definition.hasMany(Revision, {
-  foreignKey: 'revisable_id',
-  scope: {
-    revisible: 'definition'
-  },
-});
+    // Reactions association.
+    Definition.hasMany(Reaction, {
+      foreignKey: 'reactable_id',
+      scope: {
+        reactable_type: 'definition'
+      },
+      as: 'reactions'
+    });
 
-// Set vote relationship
-Definition.hasMany(Vote, {
-  foreignKey: 'voted_id',
-  scope: {
-    votable: 'definition',
-    kind: 0
-  },
-  as: 'downVotes'
-});
+    // Creator association.
+    Definition.belongsTo(User, {
+      foreignKey: 'creator_id',
+      as: 'creator'
+    });
 
-// Set vote relationship
-Definition.hasMany(Vote, {
-  foreignKey: 'voted_id',
-  scope: {
-    votable: 'definition',
-    kind: 1
-  },
-  as: 'upVotes'
-});
+    // Editor association.
+    Definition.belongsTo(User, {
+      foreignKey: 'editor_id',
+      as: 'editor'
+    });
+  };
 
-// Set vote relationship
-Definition.hasMany(Vote, {
-  foreignKey: 'voted_id',
-  scope: { votable: 'definition' },
-  as: 'votes'
-});
-
-// Set user relationship
-Definition.belongsTo(User, {
-  foreignKey: 'user_id',
-  onDelete: 'SET NULL',
-  as: 'author'
-})
-
-// Export Definition model
-module.exports = Definition;
+  // Return model
+  return Definition;
+};

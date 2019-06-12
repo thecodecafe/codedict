@@ -30,12 +30,7 @@ module.exports = {
       type: Sequelize.TEXT,
       allowNull: false,
     },
-    suggested_body: {
-      type: Sequelize.STRING,
-      allowNull: true,
-      defaultValue: null,
-    },
-    edit_commments: {
+    edit_commment: {
       type: Sequelize.STRING,
       allowNull: true,
       defaultValue: null,
