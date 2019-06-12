@@ -11,21 +11,21 @@ jobs:
 
       # Download and cache dependencies
       - restore_cache:
-        keys:
-          - v1-dependeincies-{{ checksum "package.json" }}
-          # Fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
+          keys:
+            - v1-dependeincies-{{ checksum "package.json" }}
+            # Fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
 
       - run:
-        - name: Update/Install Node PAckages
-        - command: yarn install
+          name: Update/Install Node PAckages
+          command: yarn install
 
       - save_cache:
-        paths:
-          - node_modules
-        keys: v1-dependencies-{{ checksum "package.json" }}
+          keys: v1-dependencies-{{ checksum "package.json" }}
+          paths:
+            - node_modules
 
       # Run tests
       - run:
-        - name: Run Unit Tests
-        - command: yarn test
+          name: Run Unit Tests
+          command: yarn test
