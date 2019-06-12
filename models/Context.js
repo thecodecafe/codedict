@@ -11,17 +11,17 @@ module.exports = (Sequelize, DataTypes) => {
     name: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
+      unique: true
     },
     creator_id: {
       type: DataTypes.INTEGER,
       allowNull: true,
-      defaultValue: null,
+      defaultValue: null
     }
   }, {
-      underscored: true,
-      tableName: 'contexts',
-    })
+    underscored: true,
+    tableName: 'contexts'
+  });
 
   // Define associations
   Context.associate = ({ User, Term }) => {

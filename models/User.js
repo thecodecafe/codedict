@@ -14,7 +14,7 @@ module.exports = (Sequelize, DataTypes) => {
         defaultValue: null
       },
       name: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING
       },
       email: {
         type: DataTypes.STRING,
@@ -26,11 +26,11 @@ module.exports = (Sequelize, DataTypes) => {
       },
       provider: {
         type: DataTypes.STRING
-      }, // local or github
+      } // local or github
     },
     {
       underscored: true,
-      tableName: 'users',
+      tableName: 'users'
     }
   );
   
@@ -45,7 +45,6 @@ module.exports = (Sequelize, DataTypes) => {
     Reminder,
     Activation
   }) => {
-
     // Roles association
     User.belongsToMany(Role, {
       as: 'roles',
@@ -57,7 +56,7 @@ module.exports = (Sequelize, DataTypes) => {
     // Contexts association
     User.hasMany(Context, {
       as: 'contexts',
-      foreignKey: 'creator_id',
+      foreignKey: 'creator_id'
     });
 
     // Contributions association
@@ -65,57 +64,57 @@ module.exports = (Sequelize, DataTypes) => {
       as: 'contributions',
       through: 'Contributor',
       foreignKey: 'contributor_id',
-      otherKey: 'term_id',
+      otherKey: 'term_id'
     });
 
     // Created Definitions association
     User.hasMany(Definition, {
       as: 'createdDefinitions',
-      foreignKey: 'creator_id',
+      foreignKey: 'creator_id'
     });
 
     // Edited Definitions association
     User.hasMany(Definition, {
       as: 'editedDefinitions',
-      foreignKey: 'editor_id',
+      foreignKey: 'editor_id'
     });
 
     // Created Terms association
     User.hasMany(Term, {
       as: 'createdTerms',
-      foreignKey: 'creator_id',
+      foreignKey: 'creator_id'
     });
 
     // Edited Terms association
     User.hasMany(Term, {
       as: 'editedTerms',
-      foreignKey: 'editor_id',
+      foreignKey: 'editor_id'
     });
 
     // Point association
     User.hasMany(Point, {
       as: 'points',
-      foreignKey: 'user_id',
+      foreignKey: 'user_id'
     });
 
     // Reaction association
     User.hasMany(Reaction, {
       as: 'reactions',
-      foreignKey: 'reactor_id',
+      foreignKey: 'reactor_id'
     });
 
     // Reminder association
     User.hasOne(Reminder, {
       as: 'reminders',
-      foreignKey: 'user_id',
+      foreignKey: 'user_id'
     });
 
     // Activation association
     User.hasOne(Activation, {
       as: 'activations',
-      foreignKey: 'user_id',
+      foreignKey: 'user_id'
     });
-  }
+  };
 
   // return model
   return User;

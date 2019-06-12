@@ -17,7 +17,7 @@ module.exports = (Sequelize, DataTypes) => {
     },
     {
       underscored: true,
-      tableName: 'roles',
+      tableName: 'roles'
     }
   );
 

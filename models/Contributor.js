@@ -10,11 +10,11 @@ module.exports = (Sequelize, DataTypes) => {
   const Contributor = Sequelize.define('Contributor', {
     term_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: false
     },
     contributor_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: false
     },
     subscribed: {
       type: DataTypes.INTEGER,
@@ -39,7 +39,7 @@ module.exports = (Sequelize, DataTypes) => {
       foreignKey: 'contributor_id',
       as: 'contributor'
     });
-  }
+  };
 
   // Return model
   return Contributor;

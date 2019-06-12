@@ -10,21 +10,21 @@ module.exports = (Sequelize, DataTypes) => {
   const Activation = Sequelize.define('Activation', {
     user_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: false
     },
     code: {
       type: DataTypes.TEXT,
-      allowNull: true,
+      allowNull: true
     },
     activated_at: {
       type: DataTypes.DATE,
       allowNull: true,
       defaultValue: null
-    },
+    }
   }, {
-      underscored: true,
-      tableName: 'activations',
-    });
+    underscored: true,
+    tableName: 'activations'
+  });
 
   // Define association
   Activation.associate = ({ User }) => {
@@ -34,7 +34,7 @@ module.exports = (Sequelize, DataTypes) => {
       targetKey: 'id',
       as: 'user'
     });
-  }
+  };
 
   // Return model
   return Activation;

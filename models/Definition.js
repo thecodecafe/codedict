@@ -13,17 +13,17 @@ module.exports = (Sequelize, DataTypes) => {
   const Definition = Sequelize.define('Definition', {
     term_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: false
     },
     creator_id: {
       type: DataTypes.INTEGER,
       allowNull: true,
-      defaultValue: null,
+      defaultValue: null
     },
     editor_id: {
       type: DataTypes.INTEGER,
       allowNull: true,
-      defaultValue: null,
+      defaultValue: null
     },
     type: {
       type: DataTypes.INTEGER,
@@ -40,12 +40,12 @@ module.exports = (Sequelize, DataTypes) => {
     edit_comment: {
       type: DataTypes.STRING,
       allowNull: true,
-      defaultValue: null,
-    },
+      defaultValue: null
+    }
   }, {
-      underscored: true,
-      tableName: 'definitions',
-    });
+    underscored: true,
+    tableName: 'definitions'
+  });
 
   // Define associations
   Definition.associate = ({ User, Reaction, Term }) => {
@@ -59,7 +59,7 @@ module.exports = (Sequelize, DataTypes) => {
     Definition.hasMany(Reaction, {
       foreignKey: 'reactable_id',
       scope: {
-        reactable_type: 'definition',
+        reactable_type: 'definition'
       },
       as: 'reactions'
     });
@@ -75,9 +75,8 @@ module.exports = (Sequelize, DataTypes) => {
       foreignKey: 'editor_id',
       as: 'editor'
     });
-
-  }
+  };
 
   // Return model
-  return Definition
+  return Definition;
 };

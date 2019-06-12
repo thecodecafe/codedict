@@ -14,31 +14,31 @@ module.exports = (Sequelize, DataTypes) => {
     user_id: {
       type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: 'general',
+      defaultValue: 'general'
     },
     amount: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: 0,
+      defaultValue: 0
     },
     type: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
         isIn: POINT_TYPES
-      },
+      }
     },
     pointable_type: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: true
     },
     pointable_id: {
       type: DataTypes.INTEGER,
-      allowNull: true,
-    },
+      allowNull: true
+    }
   }, {
-      underscored: true,
-      tableName: 'points',
+    underscored: true,
+    tableName: 'points'
   });
 
   // Define associations

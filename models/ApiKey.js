@@ -10,20 +10,20 @@ module.exports = (Sequelize, DataTypes) => {
   const ApiKey = Sequelize.define('ApiKey', {
     key: {
       type: DataTypes.TEXT,
-      allowNull: false,
+      allowNull: false
     },
     domains: {
       type: DataTypes.TEXT,
-      allowNull: false,
+      allowNull: false
     },
     blacklisted_at: {
       type: DataTypes.DATE,
       allowNull: true,
-      defaultValue: null,
+      defaultValue: null
     }
   }, {
     underscored: true,
-    tableName: 'api_keys',
+    tableName: 'api_keys'
   });
   // Return model
   return ApiKey;

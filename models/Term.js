@@ -18,24 +18,24 @@ module.exports = (Sequelize, DataTypes) => {
       },
       context_id: {
         type: DataTypes.INTEGER,
-        allowNull: true,
+        allowNull: true
       },
       creator_id: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: false
       },
       edit_comment: {
         type: DataTypes.STRING,
-        allowNull: true,
+        allowNull: true
       },
       editor_id: {
         type: DataTypes.INTEGER,
-        allowNull: true,
+        allowNull: true
       }
     },
     {
       underscored: true,
-      tableName: 'terms',
+      tableName: 'terms'
     }
   );
 
@@ -86,7 +86,7 @@ module.exports = (Sequelize, DataTypes) => {
     // Context association.
     Term.belongsTo(Context, {
       foreignKey: 'context_id',
-      as: 'context',
+      as: 'context'
     });
 
     // Contributors association.
@@ -94,9 +94,9 @@ module.exports = (Sequelize, DataTypes) => {
       as: 'contributors',
       foreignKey: 'term_id',
       otherKey: 'contributor_id',
-      through: 'Contributor',
+      through: 'Contributor'
     });
-  }
+  };
 
   // return model
   return Term;

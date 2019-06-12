@@ -18,24 +18,24 @@ module.exports = (Sequelize, DataTypes) => {
         defaultValue: 'unknown',
         validate: {
           isIn: REACTION_TYPES
-        },
+        }
       },
       reactable_type: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: false
       },
       reactable_id: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: false
       },
       reactor_id: {
         type: DataTypes.INTEGER,
-        allowNull: true,
-      },
+        allowNull: true
+      }
     },
     {
       underscored: true,
-      tableName: 'reactions',
+      tableName: 'reactions'
     }
   );
 
@@ -64,7 +64,7 @@ module.exports = (Sequelize, DataTypes) => {
         reactable_type: 'definition'
       }
     });
-  }
+  };
 
   // Return model
   return Reaction;

@@ -10,20 +10,20 @@ module.exports = (Sequelize, DataTypes) => {
     {
       user_id: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: false
       },
       code: {
         type: DataTypes.TEXT,
-        allowNull: true,
+        allowNull: true
       },
       expires_at: {
         type: DataTypes.DATE,
         allowNull: true
-      },
+      }
     },
     {
       underscored: true,
-      tableName: 'reminders',
+      tableName: 'reminders'
     }
   );
 
@@ -35,7 +35,7 @@ module.exports = (Sequelize, DataTypes) => {
       targetKey: 'id',
       as: 'user'
     });
-  }
+  };
 
   // return model
   return Reminder;
