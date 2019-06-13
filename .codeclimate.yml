@@ -1,0 +1,6 @@
+exclude_patterns:
+- 'database/migrations/*.js'
+- 'test/**/*.*.js'
+checks:
+  similar-code:
+    enabled: false
