@@ -1,6 +1,7 @@
 'use strict';
 const { DataTypes } = require('sequelize');
 const { REACTION_TYPES } = require('../configs/const');
+const PolymorphicGenerator = require('../utils/PolymorphicGenerator');
 
 /**
  * Model properties
@@ -45,30 +46,20 @@ const ReactorAssociation = (Model, User) => {
  * @param {Object} Model
  * @param {Object} Term
  */
-const TermAssociation = (Model, Term) => {
-  Model.belongsTo(Term, {
-    foreignKey: 'reactable_id',
-    as: 'term',
-    scope: {
-      reactable_type: 'term'
-    }
-  });
-};
+const TermAssociation = (Model, Term) => Model.belongsTo(
+  Term,
+  PolymorphicGenerator('reactable', 'term', 'terms')
+);
 
 /**
  * Defines a definition relationship.
  * @param {Object} Model
  * @param {Object} Defintiion
  */
-const DefinitionAssociation = (Model, Definition) => {
-  Model.belongsTo(Definition, {
-    foreignKey: 'reactable_id',
-    as: 'term',
-    scope: {
-      reactable_type: 'term'
-    }
-  });
-};
+const DefinitionAssociation = (Model, Definition) => Model.belongsTo(
+  Definition,
+  PolymorphicGenerator('reactable', 'definition', 'definitions')
+);
 
 /**
  * Reaction Model.

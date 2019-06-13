@@ -22,26 +22,28 @@ const Props = {
  * @param {Object} Model
  * @param {Object} User
  */
-const CreatorAssociation = (Model, User) => {
-  Model.belongsTo(User, {
+const CreatorAssociation = (Model, User) => Model.belongsTo(
+  User,
+  {
     foreignKey: 'creator_id',
     as: 'creator',
     targetKey: 'id'
-  });
-};
+  }
+);
 
 /**
  * Create context terms relationship.
  * @param {Object} Model
  * @param {Object} Term
  */
-const TermsAssociation = (Model, Term) => {
-  Model.hasMany(Term, {
+const TermsAssociation = (Model, Term) => Model.hasMany(
+  Term,
+  {
     foreignKey: 'context_id',
     as: 'terms',
     targetKey: 'id'
-  });
-};
+  }
+);
 
 /**
  * Context Model

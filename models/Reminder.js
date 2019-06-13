@@ -1,6 +1,9 @@
 'use strict';
 const { DataTypes } = require('sequelize');
 
+/**
+ * Model props
+ */
 const Props = {
   user_id: {
     type: DataTypes.INTEGER,
@@ -21,13 +24,14 @@ const Props = {
  * @param {Object} Model
  * @param {Object} User
  */
-const OwnerAssociation = (Model, User) => {
-  Model.belongsTo(User, {
+const OwnerAssociation = (Model, User) => Model.belongsTo(
+  User,
+  {
     foreignKey: 'user_id',
     targetKey: 'id',
     as: 'owner'
-  });
-};
+  }
+);
 
 /**
  * Reminder Model.

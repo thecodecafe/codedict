@@ -1,5 +1,6 @@
 'use strict';
 const { DataTypes } = require('sequelize');
+const ManyToManyGenerator = require('../utils/ManyToManyGenerator');
 
 /**
  * Model properties.
@@ -18,14 +19,10 @@ const Props = {
  * @param {Object} Model
  * @param {Object} User
  */
-const MembersAssociation = (Model, User) => {
-  Model.belongsToMany(User, {
-    through: 'RoleUser',
-    as: 'users',
-    foreignKey: 'role_id',
-    otherKey: 'user_id'
-  });
-};
+const MembersAssociation = (Model, User) => Model.belongsToMany(
+  User,
+  ManyToManyGenerator('RolesUser', 'role_id', 'user_id', 'users')
+);
 
 /**
  * Role Model.
