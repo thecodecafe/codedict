@@ -1,44 +1,69 @@
 'use strict';
+const { DataTypes } = require('sequelize');
+
 /**
- * Contributor Model
- * @param {Object} Sequelize
+ * Creates model properties
  * @param {Object} DataTypes
  * @returns Object
  */
-module.exports = (Sequelize, DataTypes) => {
-  // Define model
-  const Contributor = Sequelize.define('Contributor', {
-    term_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    contributor_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    subscribed: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      defaultValue: 0
-    }
-  }, {
-    underscored: true,
-    tableName: 'contributors'
+const Props = {
+  term_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  },
+  contributor_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  },
+  subscribed: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    defaultValue: 0
+  }
+};
+
+/**
+ * Create contributor term relationship.
+ * @param {Object} Model
+ * @param {Object} Term
+ */
+const TermAssociation = (Model, Term) => {
+  Model.belongsTo(Term, {
+    foreignKey: 'term_id',
+    as: 'term'
   });
+};
+
+/**
+ * Create contributor term relationship.
+ * @param {Object} Model
+ * @param {Object} User
+ */
+const ContributorAssociation = (Model, User) => {
+  Model.belongsTo(User, {
+    foreignKey: 'contributor_id',
+    as: 'contributor'
+  });
+};
+
+/**
+ * Contributor Model
+ * @param {Object} Sequelize
+ * @returns Object
+ */
+module.exports = Sequelize => {
+  // Define model
+  const Contributor = Sequelize.define(
+    'Contributor',
+    Props,
+    {underscored: true, tableName: 'contributors'}
+  );
 
   // Define associations
   Contributor.associate = ({ User, Term }) => {
-    // Term association
-    Contributor.belongsTo(Term, {
-      foreignKey: 'term_id',
-      as: 'term'
-    });
-
-    // Contributor association
-    Contributor.belongsTo(User, {
-      foreignKey: 'contributor_id',
-      as: 'contributor'
-    });
+    // Call relationship creators
+    TermAssociation(Contributor, Term);
+    ContributorAssociation(Contributor, User);
   };
 
   // Return model
