@@ -1,120 +1,207 @@
 'use strict';
+const { DataTypes } = require('sequelize');
+
+/**
+ * Model properties.
+ */
+const Props = {
+  avatar: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+    defaultValue: null
+  },
+  name: {
+    type: DataTypes.STRING
+  },
+  email: {
+    type: DataTypes.STRING,
+    unique: true,
+    validate: { isEmail: true }
+  },
+  password: {
+    type: DataTypes.STRING
+  },
+  provider: {
+    type: DataTypes.STRING
+  } // local/github
+};
+
+/**
+ * Defines roles relationship.
+ * @param {Object} Model
+ * @param {Object} Role
+ */
+const RolesAssociation = (Model, Role) => {
+  Model.belongsToMany(Role, {
+    as: 'roles',
+    through: 'RoleUser',
+    foreignKey: 'user_id',
+    otherKey: 'role_id'
+  });
+};
+
+/**
+ * Defines contexts relationship.
+ * @param {Object} Model
+ * @param {Object} Context
+ */
+const ContextsAssociation = (Model, Context) => {
+  Model.hasMany(Context, {
+    as: 'contexts',
+    foreignKey: 'creator_id'
+  });
+};
+
+/**
+ * Defines contrinutions relationship.
+ * @param {Object} Model
+ * @param {Object} Term
+ */
+const ContributionsAssociation = (Model, Term) => {
+  Model.belongsToMany(Term, {
+    as: 'contributions',
+    through: 'Contributor',
+    foreignKey: 'contributor_id',
+    otherKey: 'term_id'
+  });
+};
+
+/**
+ * Defines created definitions relationship.
+ * @param {Object} Model
+ * @param {Object} Definition
+ */
+const CreatedDefinitionsAssociation = (Model, Definition) => {
+  Model.hasMany(Definition, {
+    as: 'createdDefinitions',
+    foreignKey: 'creator_id'
+  });
+};
+
+/**
+ * Defines edited definitions relationship.
+ * @param {Object} Model
+ * @param {Object} Definition
+ */
+const EditedDefinitionsAssociation = (Model, Definition) => {
+  Model.hasMany(Definition, {
+    as: 'editedDefinitions',
+    foreignKey: 'editor_id'
+  });
+};
+
+/**
+ * Defines created terms relationship.
+ * @param {Object} Model
+ * @param {Object} Term
+ */
+const CreatedTermsAssociation = (Model, Term) => {
+  Model.hasMany(Term, {
+    as: 'createdTerms',
+    foreignKey: 'creator_id'
+  });
+};
+
+/**
+ * Defines edited terms relationship.
+ * @param {Object} Model
+ * @param {Object} Term
+ */
+const EditedTermsAssociation = (Model, Term) => {
+  Model.hasMany(Term, {
+    as: 'editedTerms',
+    foreignKey: 'editor_id'
+  });
+};
+
+/**
+ * Defines points relationship.
+ * @param {Object} Model
+ * @param {Object} Point
+ */
+const PointsAssociation = (Model, Point) => {
+  Model.hasMany(Point, {
+    as: 'points',
+    foreignKey: 'user_id'
+  });
+};
+
+/**
+ * Defines reactions relationship.
+ * @param {Object} Model
+ * @param {Object} Reaction
+ */
+const ReactionsAssociation = (Model, Reaction) => {
+  Model.hasMany(Reaction, {
+    as: 'reactions',
+    foreignKey: 'reactor_id'
+  });
+};
+
+/**
+ * Defines reminders relationship.
+ * @param {Object} Model
+ * @param {Object} Reminder
+ */
+const RemindersAssociation = (Model, Reminder) => {
+  Model.hasOne(Reminder, {
+    as: 'reminders',
+    foreignKey: 'user_id'
+  });
+};
+
+/**
+ * Defines activations relationship.
+ * @param {Object} Model
+ * @param {Object} Activation
+ */
+const ActivationsAssociation = (Model, Activation) => {
+  Model.hasOne(Activation, {
+    as: 'activations',
+    foreignKey: 'user_id'
+  });
+};
+
+/**
+ * Defines all model's associations.
+ * @param {Object} Model
+ * @param {Object} Relations
+ */
+const Associate = (Model, {
+  Role, Context,
+  Term, Definition,
+  Point, Reaction, 
+  Reminder, Activation
+}) => {
+  // Call associations creators
+  RolesAssociation(Model, Role);
+  ContextsAssociation(Model, Context);
+  ContributionsAssociation(Model, Term);
+  CreatedDefinitionsAssociation(Model, Definition);
+  EditedDefinitionsAssociation(Model, Definition);
+  CreatedTermsAssociation(Model, Term);
+  EditedTermsAssociation(Model, Term);
+  PointsAssociation(Model, Point);
+  ReactionsAssociation(Model, Reaction);
+  RemindersAssociation(Model, Reminder);
+  ActivationsAssociation(Model, Activation);
+};
+
 /**
  * User Model.
  * @param {Object} Sequelize
  * @param {Object} DataTypes
  * @returns Object
  */
-module.exports = (Sequelize, DataTypes) => {
-  const User = Sequelize.define('User',
-    {
-      avatar: {
-        type: DataTypes.TEXT,
-        allowNull: true,
-        defaultValue: null
-      },
-      name: {
-        type: DataTypes.STRING
-      },
-      email: {
-        type: DataTypes.STRING,
-        unique: true,
-        validate: { isEmail: true }
-      },
-      password: {
-        type: DataTypes.STRING
-      },
-      provider: {
-        type: DataTypes.STRING
-      } // local or github
-    },
-    {
-      underscored: true,
-      tableName: 'users'
-    }
+module.exports = Sequelize => {
+  const User = Sequelize.define(
+    'User',
+    Props,
+    {underscored: true, tableName: 'users'}
   );
   
   // Create associations
-  User.associate = ({
-    Role,
-    Context,
-    Term,
-    Definition,
-    Point,
-    Reaction,
-    Reminder,
-    Activation
-  }) => {
-    // Roles association
-    User.belongsToMany(Role, {
-      as: 'roles',
-      through: 'RoleUser',
-      foreignKey: 'user_id',
-      otherKey: 'role_id'
-    });
-
-    // Contexts association
-    User.hasMany(Context, {
-      as: 'contexts',
-      foreignKey: 'creator_id'
-    });
-
-    // Contributions association
-    User.belongsToMany(Term, {
-      as: 'contributions',
-      through: 'Contributor',
-      foreignKey: 'contributor_id',
-      otherKey: 'term_id'
-    });
-
-    // Created Definitions association
-    User.hasMany(Definition, {
-      as: 'createdDefinitions',
-      foreignKey: 'creator_id'
-    });
-
-    // Edited Definitions association
-    User.hasMany(Definition, {
-      as: 'editedDefinitions',
-      foreignKey: 'editor_id'
-    });
-
-    // Created Terms association
-    User.hasMany(Term, {
-      as: 'createdTerms',
-      foreignKey: 'creator_id'
-    });
-
-    // Edited Terms association
-    User.hasMany(Term, {
-      as: 'editedTerms',
-      foreignKey: 'editor_id'
-    });
-
-    // Point association
-    User.hasMany(Point, {
-      as: 'points',
-      foreignKey: 'user_id'
-    });
-
-    // Reaction association
-    User.hasMany(Reaction, {
-      as: 'reactions',
-      foreignKey: 'reactor_id'
-    });
-
-    // Reminder association
-    User.hasOne(Reminder, {
-      as: 'reminders',
-      foreignKey: 'user_id'
-    });
-
-    // Activation association
-    User.hasOne(Activation, {
-      as: 'activations',
-      foreignKey: 'user_id'
-    });
-  };
+  User.associate = Relations => Associate(User, Relations);
 
   // return model
   return User;
