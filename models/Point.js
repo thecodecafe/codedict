@@ -1,6 +1,7 @@
 'use strict';
 const { DataTypes } = require('sequelize');
 const { POINT_TYPES } = require('../configs/const');
+const PolymorphicGenerator = require('../utils/PolymorphicGenerator');
 
 const Props = {
   user_id: {
@@ -16,9 +17,7 @@ const Props = {
   type: {
     type: DataTypes.STRING,
     allowNull: false,
-    validate: {
-      isIn: POINT_TYPES
-    }
+    validate: {isIn: POINT_TYPES}
   },
   pointable_type: {
     type: DataTypes.STRING,
@@ -35,42 +34,39 @@ const Props = {
  * @param {Object} Model
  * @param {Object} User
  */
-const OwnerAssociation = (Model, User) => {
-  Model.belongsTo(User, {
+const OwnerAssociation = (Model, User) => Model.belongsTo(
+  User,
+  {
     foreignKey: 'user_id',
     as: 'owner'
-  });
-};
+  }
+);
 
 /**
  * Defines terms relationship.
  * @param {Object} Model
  * @param {Object} Term
  */
-const TermsAssociation = (Model, Term) => {
-  Model.belongsTo(Term, {
-    foreignKey: 'pointable_id',
-    scope: {
-      pointable_type: 'term'
-    },
-    as: 'terms'
-  });
-};
+const TermsAssociation = (Model, Term) => Model.belongsTo(
+  Term,
+  PolymorphicGenerator('pointable', 'term', 'terms')
+);
 
 /**
  * Defines definition relationship.
  * @param {Object} Model
  * @param {Object} Definition
  */
-const DefinitionAssociation = (Model, Definition) => {
-  Model.belongsTo(Definition, {
+const DefinitionAssociation = (Model, Definition) => Model.belongsTo(
+  Definition,
+  {
     foreignKey: 'pointable_id',
     scope: {
       pointable_type: 'definition'
     },
     as: 'definition'
-  });
-};
+  }
+);
 
 /**
  * Point Model

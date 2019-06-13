@@ -1,6 +1,8 @@
 'use strict';
 const { DataTypes } = require('sequelize');
 const { SIMPLE_DEFINITION, TECHNICAL_DEFINITION } = require('../configs/const');
+const PolymorphicGenerator = require('../utils/PolymorphicGenerator');
+const ManyToManyGenerator = require('../utils/ManyToManyGenerator');
 
 /**
  * Model properties.
@@ -29,97 +31,79 @@ const Props = {
 };
 
 /**
- * Defines technical definition relationship.
+ * Defines technical/simple definition relationship.
  * @param {Object} Model
  * @param {Object} Definition
  */
-const TechnicalDefinitionAssociation = (Model, Definition) => {
-  Model.hasOne(Definition, {
+const DefinitionAssociation = (Model, Definition, Type, Alias) => Model.hasOne(
+  Definition,
+  {
     foreignKey: 'term_id',
-    scope: {
-      type: TECHNICAL_DEFINITION
-    },
-    as: 'technical'
-  });
-};
-
-/**
- * Defines simple definition relationship.
- * @param {Object} Model
- * @param {Object} Definition
- */
-const SimpleDefinitionAssociation = (Model, Definition) => {
-  Model.hasOne(Definition, {
-    foreignKey: 'term_id',
-    scope: {
-      type: SIMPLE_DEFINITION
-    },
-    as: 'simple'
-  });
-};
+    scope: {type: Type},
+    as: Alias
+  }
+);
 
 /**
  * Defines reactions relationship.
  * @param {Object} Model
  * @param {Object} Reaction
  */
-const ReactionsAssociation = (Model, Reaction) => {
-  Model.hasMany(Reaction, {
-    foreignKey: 'reactable_id',
-    scope: { reactable_type: 'term' },
-    as: 'reactions'
-  });
-};
+const ReactionsAssociation = (Model, Reaction) => Model.hasMany(
+  Reaction,
+  PolymorphicGenerator('reactable', 'term', 'reactions')
+);
 
 /**
  * Defines creator relationship.
  * @param {Object} Model
  * @param {Object} Creator
  */
-const CreatorAssociation = (Model, User) => {
-  Model.belongsTo(User, {
+const CreatorAssociation = (Model, User) => Model.belongsTo(
+  User,
+  {
     foreignKey: 'creator_id',
     as: 'creator'
-  });
-};
+  }
+);
 
 /**
  * Defines editor relationship.
  * @param {Object} Model
  * @param {Object} Editor
  */
-const EditorAssociation = (Model, User) => {
-  Model.belongsTo(User, {
+const EditorAssociation = (Model, User) => Model.belongsTo(
+  User,
+  {
     foreignKey: 'editor_id',
     as: 'editor'
-  });
-};
+  }
+);
 
 /**
  * Defines context relationship.
  * @param {Object} Model
  * @param {Object} Context
  */
-const ContextAssociation = (Model, Context) => {
-  Model.belongsTo(Context, {
+const ContextAssociation = (Model, Context) => Model.belongsTo(
+  Context,
+  {
     foreignKey: 'context_id',
     as: 'context'
-  });
-};
+  }
+);
 
 /**
  * Defines contributors relationship.
  * @param {Object} Model
  * @param {Object} Context
  */
-const ContributorsAssociation = (Model, User) => {
-  Model.belongsToMany(User, {
-    as: 'contributors',
-    foreignKey: 'term_id',
-    otherKey: 'contributor_id',
-    through: 'Contributor'
-  });
-};
+const ContributorsAssociation = (Model, User) => Model.belongsToMany(
+  User,
+  ManyToManyGenerator(
+    'Contributor', 'term_id', 'contributor_id', 'contributors'
+  )
+);
 
 /**
  * Term Model.
@@ -138,8 +122,8 @@ module.exports = Sequelize => {
   // Define associations
   Term.associate = ({User, Context, Definition, Reaction}) => {
     // Call associations creators
-    TechnicalDefinitionAssociation(Term, Definition);
-    SimpleDefinitionAssociation(Term, Definition);
+    DefinitionAssociation(Term, Definition, TECHNICAL_DEFINITION, 'technical');
+    DefinitionAssociation(Term, Definition, SIMPLE_DEFINITION, 'simple');
     ReactionsAssociation(Term, Reaction);
     CreatorAssociation(Term, User);
     EditorAssociation(Term, User);

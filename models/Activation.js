@@ -25,14 +25,14 @@ const Props = {
  * @param {Object} Model
  * @param {Object} User
  */
-const OwnerAssociation = (Model, User) => {
-  // Owner Association
-  Model.belongsTo(User, {
+const OwnerAssociation = (Model, User) => Model.belongsTo(
+  User,
+  {
     foreignKey: 'user_id',
     targetKey: 'id',
     as: 'owner'
-  });
-};
+  }
+);
 
 /**
  * Activation Model

@@ -1,5 +1,6 @@
 'use strict';
 const { DataTypes } = require('sequelize');
+const ManyToManyGenerator = require('../utils/ManyToManyGenerator');
 
 /**
  * Model properties.
@@ -31,136 +32,139 @@ const Props = {
  * @param {Object} Model
  * @param {Object} Role
  */
-const RolesAssociation = (Model, Role) => {
-  Model.belongsToMany(Role, {
-    as: 'roles',
-    through: 'RoleUser',
-    foreignKey: 'user_id',
-    otherKey: 'role_id'
-  });
-};
+const RolesAssociation = (Model, Role) => Model.belongsToMany(
+  Role,
+  ManyToManyGenerator('RoleUser', 'user_id', 'role_id', 'roles')
+);
 
 /**
  * Defines contexts relationship.
  * @param {Object} Model
  * @param {Object} Context
  */
-const ContextsAssociation = (Model, Context) => {
-  Model.hasMany(Context, {
+const ContextsAssociation = (Model, Context) => Model.hasMany(
+  Context,
+  {
     as: 'contexts',
     foreignKey: 'creator_id'
-  });
-};
+  }
+);
 
 /**
  * Defines contrinutions relationship.
  * @param {Object} Model
  * @param {Object} Term
  */
-const ContributionsAssociation = (Model, Term) => {
-  Model.belongsToMany(Term, {
-    as: 'contributions',
-    through: 'Contributor',
-    foreignKey: 'contributor_id',
-    otherKey: 'term_id'
-  });
-};
+const ContributionsAssociation = (Model, Term) => Model.belongsToMany(
+  Term,
+  ManyToManyGenerator(
+    'Contributor', 'contributor_id', 'term_id', 'contributions'
+  )
+);
 
 /**
  * Defines created definitions relationship.
  * @param {Object} Model
  * @param {Object} Definition
  */
-const CreatedDefinitionsAssociation = (Model, Definition) => {
-  Model.hasMany(Definition, {
+const CreatedDefinitionsAssociation = (Model, Definition) => Model.hasMany(
+  Definition,
+  {
     as: 'createdDefinitions',
     foreignKey: 'creator_id'
-  });
-};
+  }
+);
 
 /**
  * Defines edited definitions relationship.
  * @param {Object} Model
  * @param {Object} Definition
  */
-const EditedDefinitionsAssociation = (Model, Definition) => {
-  Model.hasMany(Definition, {
+const EditedDefinitionsAssociation = (Model, Definition) => Model.hasMany(
+  Definition,
+  {
     as: 'editedDefinitions',
     foreignKey: 'editor_id'
-  });
-};
+  }
+);
 
 /**
  * Defines created terms relationship.
  * @param {Object} Model
  * @param {Object} Term
  */
-const CreatedTermsAssociation = (Model, Term) => {
-  Model.hasMany(Term, {
+const CreatedTermsAssociation = (Model, Term) => Model.hasMany(
+  Term,
+  {
     as: 'createdTerms',
     foreignKey: 'creator_id'
-  });
-};
+  }
+);
 
 /**
  * Defines edited terms relationship.
  * @param {Object} Model
  * @param {Object} Term
  */
-const EditedTermsAssociation = (Model, Term) => {
-  Model.hasMany(Term, {
+const EditedTermsAssociation = (Model, Term) => Model.hasMany(
+  Term,
+  {
     as: 'editedTerms',
     foreignKey: 'editor_id'
-  });
-};
+  }
+);
 
 /**
  * Defines points relationship.
  * @param {Object} Model
  * @param {Object} Point
  */
-const PointsAssociation = (Model, Point) => {
-  Model.hasMany(Point, {
+const PointsAssociation = (Model, Point) => Model.hasMany(
+  Point,
+  {
     as: 'points',
     foreignKey: 'user_id'
-  });
-};
+  }
+);
 
 /**
  * Defines reactions relationship.
  * @param {Object} Model
  * @param {Object} Reaction
  */
-const ReactionsAssociation = (Model, Reaction) => {
-  Model.hasMany(Reaction, {
+const ReactionsAssociation = (Model, Reaction) => Model.hasMany(
+  Reaction,
+  {
     as: 'reactions',
     foreignKey: 'reactor_id'
-  });
-};
+  }
+);
 
 /**
  * Defines reminders relationship.
  * @param {Object} Model
  * @param {Object} Reminder
  */
-const RemindersAssociation = (Model, Reminder) => {
-  Model.hasOne(Reminder, {
+const RemindersAssociation = (Model, Reminder) => Model.hasOne(
+  Reminder,
+  {
     as: 'reminders',
     foreignKey: 'user_id'
-  });
-};
+  }
+);
 
 /**
  * Defines activations relationship.
  * @param {Object} Model
  * @param {Object} Activation
  */
-const ActivationsAssociation = (Model, Activation) => {
-  Model.hasOne(Activation, {
+const ActivationsAssociation = (Model, Activation) => Model.hasOne(
+  Activation,
+  {
     as: 'activations',
     foreignKey: 'user_id'
-  });
-};
+  }
+);
 
 /**
  * Defines all model's associations.

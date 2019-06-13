@@ -27,24 +27,26 @@ const Props = {
  * @param {Object} Model
  * @param {Object} Term
  */
-const TermAssociation = (Model, Term) => {
-  Model.belongsTo(Term, {
+const TermAssociation = (Model, Term) => Model.belongsTo(
+  Term,
+  {
     foreignKey: 'term_id',
     as: 'term'
-  });
-};
+  }
+);
 
 /**
  * Create contributor term relationship.
  * @param {Object} Model
  * @param {Object} User
  */
-const ContributorAssociation = (Model, User) => {
-  Model.belongsTo(User, {
+const ContributorAssociation = (Model, User) => Model.belongsTo(
+  User,
+  {
     foreignKey: 'contributor_id',
     as: 'contributor'
-  });
-};
+  }
+);
 
 /**
  * Contributor Model
