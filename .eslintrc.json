@@ -58,6 +58,7 @@
         "semi": "error",
         "no-new-wrappers": "error",
         "radix": "error",
-        "id-length": ["error", { "min": 2, "exceptions": ["i", "j", "k"] }]
+        "id-length": ["error", { "min": 2, "exceptions": ["i", "j", "k"] }],
+        "max-lines-per-function": ["error", 25]
     }
 }
