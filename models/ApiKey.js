@@ -13,6 +13,11 @@ const Props = {
     type: DataTypes.TEXT,
     allowNull: false
   },
+  expires_at: {
+    type: DataTypes.DATE,
+    allowNull: true,
+    defaultValue: null
+  },
   blacklisted_at: {
     type: DataTypes.DATE,
     allowNull: true,
