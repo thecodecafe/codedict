@@ -11,6 +11,7 @@ const sequelize = new Sql(
   {
     host: process.env.DB_HOST,
     dialect: process.env.DB_DIALECT,
+    logging: () => process.env.DB_LOGGING
   }
 );
 
