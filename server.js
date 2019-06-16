@@ -15,6 +15,7 @@ app.use(bodyParser);
 
 // attach passport to application
 app.use(passport.initialize());
+
 // define routes
 app.use('/auth', require('./routes/auth')(passport));
 app.use('/accounts', require('./routes/accounts')(passport));
@@ -22,13 +23,16 @@ app.use('/definitions', require('./routes/definitions')(passport));
 app.use('/terms', require('./routes/terms')(passport));
 
 // authenticate sequelize
-sequelize.authenticate().then(() => {
+sequelize
+  .authenticate()
+  .then(() => {
     console.log('Successfully connected to database.');
-}).catch(e => {
-    throw new Error('Failed to connect to database: '+e.message);
-});
+  })
+  .catch(error => {
+    throw new Error('Failed to connect to database: ' + error.message);
+  });
 
 // start app
 app.listen(configs.port, () => {
-    console.log(`Server started on port ${configs.port}`);
+  console.log(`Server started on port ${configs.port}`);
 });
