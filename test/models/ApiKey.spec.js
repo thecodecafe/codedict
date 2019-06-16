@@ -24,7 +24,7 @@ describe('<ApiKey Model>', () => {
 
     // Test model properties
     describe('Properties', () => {
-        ['key', 'domains', 'blacklisted_at'].forEach(
+        ['key', 'domains', 'blacklisted_at', 'expires_at'].forEach(
             checkPropertyExists(ApiKeyInstance)
         );
     });

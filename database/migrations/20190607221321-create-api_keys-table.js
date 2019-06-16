@@ -18,6 +18,11 @@ module.exports = {
       allowNull: false,
       defaultValue: '*',
     },
+    expires_at: {
+      type: Sequelize.DATE,
+      allowNull: true,
+      defaultValue: null,
+    },
     blacklisted_at: {
       type: Sequelize.DATE,
       allowNull: true,
