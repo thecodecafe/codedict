@@ -11,6 +11,12 @@ jobs:
     working_directory: ~/repo
 
     environment:
+      APP_NAME: Coders Dictionary
+      APP_VERSION: 0.0.0
+      APP_URL: http://localhost:3050
+      APP_PORT: 3050
+      APP_DEBUG: true
+      APP_KEY: U2FsdGVkX1/KOxGLPzJDw8X/UYtdrpg7MGHAOyrhv42NsI33Yi9rdfjWDC6r9crTkp3qu/GElyC28wXWPoYO2w==
       DB_NAME: cd_test_db
       DB_USER: root
       DB_PASSWORD: ''
