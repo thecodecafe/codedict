@@ -3,8 +3,26 @@ jobs:
   build:
     docker:
       - image: node:8.11.3
+      - image: circleci/postgres
+        environment:
+          POSTGRES_USER: root
+          POSTGRES_DB: cd_test_db
 
     working_directory: ~/repo
+
+    environment:
+      APP_NAME: Coders Dictionary
+      APP_VERSION: 0.0.0
+      APP_URL: http://localhost:3050
+      APP_PORT: 3050
+      APP_DEBUG: true
+      APP_KEY: U2FsdGVkX1/KOxGLPzJDw8X/UYtdrpg7MGHAOyrhv42NsI33Yi9rdfjWDC6r9crTkp3qu/GElyC28wXWPoYO2w==
+      DB_NAME: cd_test_db
+      DB_USER: root
+      DB_PASSWORD: ''
+      DB_HOST: localhost
+      DB_DIALECT: postgres
+      DB_LOGGING: false
 
     steps:
       - checkout
@@ -16,6 +34,10 @@ jobs:
       - run:
           name: Update/Install Node PAckages
           command: yarn install
+      
+      - run:
+          name: Setup DB
+          command: node_modules/.bin/sequelize db:migrate
 
       - save_cache:
           key: v1-dependencies-{{ checksum "package.json" }}
