@@ -3,8 +3,20 @@ jobs:
   build:
     docker:
       - image: node:8.11.3
+      - image: circleci/postgres
+        environment:
+          POSTGRES_USER: root
+          POSTGRES_DB: cd_test_db
 
     working_directory: ~/repo
+
+    environment:
+      DB_NAME: cd_test_db
+      DB_USER: root
+      DB_PASSWORD: ''
+      DB_HOST: localhost
+      DB_DIALECT: postgres
+      DB_LOGGING: false
 
     steps:
       - checkout
