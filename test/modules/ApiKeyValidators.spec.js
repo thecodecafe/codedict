@@ -19,7 +19,7 @@ const DummyKey = {
 };
 
 // Decribe module functions
-describe('<API Key Checkers>', () => {
+describe('<Module: API Key Checkers>', () => {
 
   // create test api key
   before(async () => {
@@ -36,18 +36,18 @@ describe('<API Key Checkers>', () => {
 
     // create test api key
     before(async () => {
-      apiKey = await ApiKey.create(DummyKey); 
+      apiKey = await ApiKey.create(DummyKey);
     });
 
     // api key should exist
     it(
-      'exists', 
+      'exists',
       async () => expect( await doesntExist(DummyKey.key) ).to.be.false
     );
 
     // api key should not exist
     it(
-      'does not exist', 
+      'does not exist',
       async () => expect( await doesntExist('Foo-Bar') ).to.be.true
     );
 
@@ -62,7 +62,7 @@ describe('<API Key Checkers>', () => {
 
     // create test api key
     before(async () => {
-      apiKey = await ApiKey.create(DummyKey); 
+      apiKey = await ApiKey.create(DummyKey);
     });
 
     // key should have not expired
@@ -91,7 +91,7 @@ describe('<API Key Checkers>', () => {
 
     // create test api key
     before(async () => {
-      apiKey = await ApiKey.create(DummyKey); 
+      apiKey = await ApiKey.create(DummyKey);
     });
 
     // key should have not be blacklisted
@@ -123,7 +123,7 @@ describe('<API Key Checkers>', () => {
 
     // create test api key
     before(async () => {
-      apiKey = await ApiKey.create(DummyKey); 
+      apiKey = await ApiKey.create(DummyKey);
     });
 
     // should allow any domain

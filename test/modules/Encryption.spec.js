@@ -7,7 +7,7 @@ const expect = chai.expect;
 
 
 // describe file test
-describe('<Encryption Module>', () => {
+describe('<Module: Encryption>', () => {
   // test data
   const testData = "THIS IS TEST DATA";
 
