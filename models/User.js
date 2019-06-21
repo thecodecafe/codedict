@@ -61,7 +61,7 @@ const ContextsAssociation = (Model, Context) => Model.hasMany(
 const ContributionsAssociation = (Model, Term) => Model.belongsToMany(
   Term,
   ManyToManyGenerator(
-    'Contributor', 'contributor_id', 'term_id', 'contributions'
+    'contributors', 'contributor_id', 'term_id', 'contributions'
   )
 );
 
@@ -206,7 +206,7 @@ module.exports = Sequelize => {
     Props,
     {underscored: true, tableName: 'users'}
   );
-  
+
   // Create associations
   User.associate = Relations => Associate(User, Relations);
 

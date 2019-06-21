@@ -101,7 +101,7 @@ const ContextAssociation = (Model, Context) => Model.belongsTo(
 const ContributorsAssociation = (Model, User) => Model.belongsToMany(
   User,
   ManyToManyGenerator(
-    'Contributor', 'term_id', 'contributor_id', 'contributors'
+    'contributors', 'term_id', 'contributor_id', 'contributor'
   )
 );
 
