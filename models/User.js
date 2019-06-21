@@ -34,7 +34,10 @@ const Props = {
  */
 const RolesAssociation = (Model, Role) => Model.belongsToMany(
   Role,
-  ManyToManyGenerator('RoleUser', 'user_id', 'role_id', 'roles')
+  {
+    ...ManyToManyGenerator('role_user', 'user_id', 'role_id', 'roles'),
+    timestamps: false
+  }
 );
 
 /**
