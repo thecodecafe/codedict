@@ -33,5 +33,5 @@ module.exports = {
    * E.g. mysql, mariadb, postgres, or mssql.
    * @var string
    */
-  dialect: process.env.DB_DIALECT,
+  dialect: process.env.DB_DIALECT
 };
